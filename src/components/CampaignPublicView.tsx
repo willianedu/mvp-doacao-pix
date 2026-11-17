@@ -98,16 +98,19 @@ export const CampaignPublicView: React.FC<CampaignPublicViewProps> = ({
 
   if (!activeCampaign) {
     return (
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 py-16 text-center">
-        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-8 space-y-3">
-          <h1 className="font-display text-2xl font-bold text-slate-900 dark:text-slate-100">
-            Nenhuma campanha ativa no momento
-          </h1>
-          <p className="text-slate-600 dark:text-slate-400 text-base leading-relaxed">
-            A equipe da O.S.C Amigos da Mara está preparando a próxima ação solidária. Volte em breve
-            ou acesse o painel administrativo para ativar uma campanha.
-          </p>
+      <main className="pb-16">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16 text-center">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-8 space-y-3">
+            <h1 className="font-display text-2xl font-bold text-slate-900 dark:text-slate-100">
+              Nenhuma campanha ativa no momento
+            </h1>
+            <p className="text-slate-600 dark:text-slate-400 text-base leading-relaxed">
+              A equipe da O.S.C Amigos da Mara está preparando a próxima ação solidária. Volte em breve
+              ou acesse o painel administrativo para ativar uma campanha.
+            </p>
+          </div>
         </div>
+        <SocialLinksSection />
       </main>
     );
   }
@@ -458,6 +461,8 @@ export const CampaignPublicView: React.FC<CampaignPublicViewProps> = ({
       </section>
 
       <PixFaqAccordion />
+
+      <SocialLinksSection campaignTitle={activeCampaign.titulo} />
     </main>
   );
 };
