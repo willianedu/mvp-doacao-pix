@@ -29,6 +29,28 @@ export default function App() {
   const [isCheckingAuth, setIsCheckingAuth] = useState<boolean>(true);
   const [adminRefreshSignal, setAdminRefreshSignal] = useState<number>(0);
 
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
+    try {
+      const saved = window.localStorage.getItem('amigos_theme');
+      if (saved === 'dark') return true;
+      if (saved === 'light') return false;
+      return window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
+    } catch {
+      return false;
+    }
+  });
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', isDarkMode);
+    try {
+      window.localStorage.setItem('amigos_theme', isDarkMode ? 'dark' : 'light');
+    } catch {
+      // Ignore storage errors
+    }
+  }, [isDarkMode]);
+
+  const handleToggleTheme = () => setIsDarkMode((prev) => !prev);
+
   const loadCampaigns = useCallback(async () => {
     try {
       const res = await ApiService.getPublicCampaigns();
@@ -164,10 +186,12 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors">
       <TopBar
         activeRoute={route}
         isAdminAuthenticated={Boolean(adminUser)}
+        isDarkMode={isDarkMode}
+        onToggleTheme={handleToggleTheme}
         onNavigateHome={handleNavigateHome}
         onNavigateAdmin={handleNavigateAdmin}
         onPrimaryAction={handleTopBarPrimaryAction}
@@ -212,7 +236,7 @@ export default function App() {
 
         {route === 'admin' && (
           isCheckingAuth ? (
-            <main className="max-w-md mx-auto px-4 py-16 text-center text-sm text-slate-600">
+            <main className="max-w-md mx-auto px-4 py-16 text-center text-sm text-slate-600 dark:text-slate-400">
               Verificando sessão segura...
             </main>
           ) : adminUser ? (
@@ -233,8 +257,8 @@ export default function App() {
         )}
       </div>
 
-      <footer className="border-t border-slate-200 bg-white py-6 px-4 sm:px-6 mt-12">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600">
+      <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-6 px-4 sm:px-6 mt-12 transition-colors">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600 dark:text-slate-400">
           <p>
             O.S.C Amigos da Mara · Plataforma de Doações e Engajamento Pix (ODS 1 — Erradicação da Pobreza)
           </p>
@@ -245,7 +269,7 @@ export default function App() {
                 e.preventDefault();
                 handleNavigateHome();
               }}
-              className="hover:text-slate-900 underline-offset-4 hover:underline"
+              className="hover:text-slate-900 dark:hover:text-slate-100 underline-offset-4 hover:underline"
             >
               Portal Público
             </a>
@@ -255,7 +279,7 @@ export default function App() {
                 e.preventDefault();
                 handleNavigateAdmin();
               }}
-              className="hover:text-slate-900 underline-offset-4 hover:underline"
+              className="hover:text-slate-900 dark:hover:text-slate-100 underline-offset-4 hover:underline"
             >
               Acesso Administrativo
             </a>
