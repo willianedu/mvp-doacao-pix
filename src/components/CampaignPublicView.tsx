@@ -3,6 +3,7 @@ import { AlertCircle, ArrowRight, HeartHandshake, QrCode, ShieldCheck } from 'lu
 import { CampanhaPublica } from '../types.ts';
 import { formatBRL, formatBRLCompact, formatDateTimeBR } from '../utils/format.ts';
 import { PixFaqAccordion } from './PixFaqAccordion.tsx';
+import { SocialLinksSection } from './SocialLinksSection.tsx';
 
 interface CampaignPublicViewProps {
   campanhas: CampanhaPublica[];
