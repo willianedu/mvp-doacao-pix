@@ -1,0 +1,6 @@
+{
+  "name": "O.S.C Amigos da Mara - Plataforma Pix",
+  "description": "Plataforma de Doações e Engajamento Pix para a O.S.C Amigos da Mara com geração instantânea de QR Code Pix, barra de progresso em tempo real e painel administrativo seguro.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
