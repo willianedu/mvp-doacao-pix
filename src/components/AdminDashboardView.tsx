@@ -182,13 +182,13 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
   if (isLoading || !data) {
     return (
       <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-6 animate-pulse">
-        <div className="h-10 bg-slate-200 rounded-xl w-64" />
+        <div className="h-10 bg-slate-200 dark:bg-slate-800 rounded-xl w-64" />
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[1, 2, 3, 4].map((n) => (
-            <div key={n} className="h-24 bg-slate-200 rounded-2xl" />
+            <div key={n} className="h-24 bg-slate-200 dark:bg-slate-800 rounded-2xl" />
           ))}
         </div>
-        <div className="h-72 bg-slate-200 rounded-2xl" />
+        <div className="h-72 bg-slate-200 dark:bg-slate-800 rounded-2xl" />
       </main>
     );
   }
@@ -198,13 +198,13 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
       {/* Header & Real-Time Notice + Fallback Manual Refresh */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <p className="text-xs font-medium text-slate-500">
+          <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
             Painel Administrativo · {data.admin.nome}
           </p>
-          <h1 className="font-display text-2xl sm:text-3xl font-bold text-slate-900 mt-0.5">
+          <h1 className="font-display text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100 mt-0.5">
             Gestão de Doações e Campanhas
           </h1>
-          <p className="text-xs text-emerald-800 font-medium mt-1">
+          <p className="text-xs text-emerald-800 dark:text-emerald-400 font-medium mt-1">
             Atualizado em tempo real via webhook Pix
           </p>
         </div>
@@ -213,7 +213,7 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
           type="button"
           onClick={() => loadDashboard(false)}
           disabled={isRefreshing}
-          className="min-h-[44px] inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-slate-300 hover:bg-slate-100 text-sm font-semibold text-slate-900 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-2 focus-visible:outline-sky-700"
+          className="min-h-[44px] inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-sm font-semibold text-slate-900 dark:text-slate-100 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-2 focus-visible:outline-sky-700"
         >
           <RefreshCw
             className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`}
@@ -229,14 +229,14 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
           role={feedback.type === 'error' ? 'alert' : 'status'}
           className={`flex items-center gap-2.5 p-3.5 rounded-xl border text-sm font-medium ${
             feedback.type === 'success'
-              ? 'bg-emerald-50 border-emerald-600 text-emerald-950'
-              : 'bg-red-50 border-red-300 text-red-900'
+              ? 'bg-emerald-50 dark:bg-emerald-950/50 border-emerald-600 dark:border-emerald-700 text-emerald-950 dark:text-emerald-100'
+              : 'bg-red-50 dark:bg-red-950/60 border-red-300 dark:border-red-800 text-red-900 dark:text-red-200'
           }`}
         >
           {feedback.type === 'success' ? (
-            <CheckCircle2 className="w-5 h-5 text-emerald-700 shrink-0" aria-hidden="true" />
+            <CheckCircle2 className="w-5 h-5 text-emerald-700 dark:text-emerald-400 shrink-0" aria-hidden="true" />
           ) : (
-            <AlertCircle className="w-5 h-5 text-red-700 shrink-0" aria-hidden="true" />
+            <AlertCircle className="w-5 h-5 text-red-700 dark:text-red-400 shrink-0" aria-hidden="true" />
           )}
           <span>{feedback.text}</span>
         </div>
@@ -244,27 +244,27 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
 
       {/* 4-Column KPI Strip */}
       <section aria-label="Indicadores de resultado" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white border border-slate-200 rounded-2xl p-5">
-          <p className="text-xs font-medium text-slate-500">Total Arrecadado</p>
-          <p className="mt-2 font-mono text-2xl font-bold text-slate-900 tabular-nums">
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5">
+          <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Total Arrecadado</p>
+          <p className="mt-2 font-mono text-2xl font-bold text-slate-900 dark:text-slate-100 tabular-nums">
             {formatBRL(data.metricas.total_arrecadado)}
           </p>
         </div>
-        <div className="bg-white border border-slate-200 rounded-2xl p-5">
-          <p className="text-xs font-medium text-slate-500">Pagamentos Aprovados</p>
-          <p className="mt-2 font-mono text-2xl font-bold text-emerald-800 tabular-nums">
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5">
+          <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Pagamentos Aprovados</p>
+          <p className="mt-2 font-mono text-2xl font-bold text-emerald-800 dark:text-emerald-400 tabular-nums">
             {data.metricas.total_aprovadas}
           </p>
         </div>
-        <div className="bg-white border border-slate-200 rounded-2xl p-5">
-          <p className="text-xs font-medium text-slate-500">Pix Pendentes</p>
-          <p className="mt-2 font-mono text-2xl font-bold text-amber-800 tabular-nums">
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5">
+          <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Pix Pendentes</p>
+          <p className="mt-2 font-mono text-2xl font-bold text-amber-800 dark:text-amber-400 tabular-nums">
             {data.metricas.total_pendentes}
           </p>
         </div>
-        <div className="bg-white border border-slate-200 rounded-2xl p-5">
-          <p className="text-xs font-medium text-slate-500">Taxa de Conversão</p>
-          <p className="mt-2 font-mono text-2xl font-bold text-sky-800 tabular-nums">
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5">
+          <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Taxa de Conversão</p>
+          <p className="mt-2 font-mono text-2xl font-bold text-sky-800 dark:text-sky-300 tabular-nums">
             {data.metricas.taxa_conversao}%
           </p>
         </div>
@@ -273,7 +273,7 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
       {/* Segmented Navigation Tabs */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div
-          className="inline-flex items-center gap-1 p-1 bg-slate-200/75 rounded-xl"
+          className="inline-flex items-center gap-1 p-1 bg-slate-200/75 dark:bg-slate-800 rounded-xl"
           role="tablist"
           aria-label="Seções administrativas"
         >
@@ -284,8 +284,8 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
             onClick={() => setActiveTab('doacoes')}
             className={`min-h-[44px] px-4 py-2 text-sm font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
               activeTab === 'doacoes'
-                ? 'bg-white text-slate-900 shadow-sm'
-                : 'text-slate-700 hover:text-slate-900'
+                ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 shadow-sm'
+                : 'text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             Últimas Doações
@@ -297,8 +297,8 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
             onClick={() => setActiveTab('campanhas')}
             className={`min-h-[44px] px-4 py-2 text-sm font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
               activeTab === 'campanhas'
-                ? 'bg-white text-slate-900 shadow-sm'
-                : 'text-slate-700 hover:text-slate-900'
+                ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 shadow-sm'
+                : 'text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             Campanhas
@@ -309,7 +309,7 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
           <button
             type="button"
             onClick={() => setShowCreateForm((v) => !v)}
-            className="min-h-[44px] inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-sky-700 hover:bg-sky-800 text-white text-sm font-semibold whitespace-nowrap cursor-pointer"
+            className="min-h-[44px] inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-sky-700 hover:bg-sky-800 dark:bg-sky-600 dark:hover:bg-sky-500 text-white text-sm font-semibold whitespace-nowrap cursor-pointer"
           >
             <Plus className="w-4 h-4" aria-hidden="true" />
             <span>Nova Campanha</span>
@@ -319,9 +319,9 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
 
       {/* Tab 1: Últimas Doações */}
       {activeTab === 'doacoes' && (
-        <section className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
-          <div className="p-4 sm:p-5 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div className="flex flex-wrap items-center gap-1 p-1 bg-slate-100 rounded-xl">
+        <section className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
+          <div className="p-4 sm:p-5 border-b border-slate-200 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex flex-wrap items-center gap-1 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl">
               {(
                 [
                   ['todas', 'Todas'],
@@ -336,8 +336,8 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
                   onClick={() => setStatusFilter(key)}
                   className={`min-h-[40px] px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
                     statusFilter === key
-                      ? 'bg-white text-slate-900 shadow-sm'
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 shadow-sm'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   {label}
@@ -356,20 +356,20 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
                 placeholder="Buscar doador ou TXID..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full min-h-[44px] pl-10 pr-3 py-2 bg-slate-50 border border-slate-300 focus:border-sky-700 rounded-xl text-sm text-slate-900 focus:outline-none"
+                className="w-full min-h-[44px] pl-10 pr-3 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-sky-700 dark:focus:border-sky-500 rounded-xl text-sm text-slate-900 dark:text-slate-100 focus:outline-none"
               />
             </div>
           </div>
 
           {data.doacoes.length === 0 ? (
-            <div className="p-10 text-center text-sm text-slate-600">
+            <div className="p-10 text-center text-sm text-slate-600 dark:text-slate-400">
               Nenhuma doação encontrada com os filtros atuais.
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-slate-200 bg-slate-50 text-xs font-semibold text-slate-600">
+                  <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-xs font-semibold text-slate-600 dark:text-slate-300">
                     <th className="py-3.5 px-4">ID</th>
                     <th className="py-3.5 px-4">Doador</th>
                     <th className="py-3.5 px-4">Campanha</th>
@@ -379,37 +379,42 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
                     <th className="py-3.5 px-4 text-right">Ações</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-200 text-sm">
+                <tbody className="divide-y divide-slate-200 dark:divide-slate-800 text-sm">
                   {data.doacoes.map((doacao) => (
-                    <tr key={doacao.id_doacao} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="py-3.5 px-4 font-mono text-xs text-slate-500 tabular-nums">
+                    <tr
+                      key={doacao.id_doacao}
+                      className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors"
+                    >
+                      <td className="py-3.5 px-4 font-mono text-xs text-slate-500 dark:text-slate-400 tabular-nums">
                         #{doacao.id_doacao}
                       </td>
-                      <td className="py-3.5 px-4 font-medium text-slate-900 max-w-[220px] break-words">
+                      <td className="py-3.5 px-4 font-medium text-slate-900 dark:text-slate-100 max-w-[220px] break-words">
                         {doacao.nome_doador || 'Apoiador anônimo'}
                       </td>
-                      <td className="py-3.5 px-4 text-slate-700">{doacao.campanha_titulo}</td>
-                      <td className="py-3.5 px-4 text-right font-mono font-semibold text-slate-900 tabular-nums whitespace-nowrap">
+                      <td className="py-3.5 px-4 text-slate-700 dark:text-slate-300">
+                        {doacao.campanha_titulo}
+                      </td>
+                      <td className="py-3.5 px-4 text-right font-mono font-semibold text-slate-900 dark:text-slate-100 tabular-nums whitespace-nowrap">
                         {formatBRL(doacao.valor_doacao)}
                       </td>
-                      <td className="py-3.5 px-4 font-mono text-xs text-slate-600 tabular-nums whitespace-nowrap">
+                      <td className="py-3.5 px-4 font-mono text-xs text-slate-600 dark:text-slate-400 tabular-nums whitespace-nowrap">
                         {formatDateTimeBR(doacao.updated_at)}
                       </td>
                       <td className="py-3.5 px-4 whitespace-nowrap">
                         {doacao.status_pagamento === 'aprovado' && (
-                          <span className="inline-flex items-center gap-1.5 font-semibold text-emerald-800">
+                          <span className="inline-flex items-center gap-1.5 font-semibold text-emerald-800 dark:text-emerald-400">
                             <CheckCircle2 className="w-4 h-4 shrink-0" aria-hidden="true" />
                             <span>Aprovado</span>
                           </span>
                         )}
                         {doacao.status_pagamento === 'pendente' && (
-                          <span className="inline-flex items-center gap-1.5 font-semibold text-amber-800">
+                          <span className="inline-flex items-center gap-1.5 font-semibold text-amber-800 dark:text-amber-400">
                             <Clock className="w-4 h-4 shrink-0" aria-hidden="true" />
                             <span>Pendente</span>
                           </span>
                         )}
                         {doacao.status_pagamento === 'expirado' && (
-                          <span className="inline-flex items-center gap-1.5 font-semibold text-slate-600">
+                          <span className="inline-flex items-center gap-1.5 font-semibold text-slate-600 dark:text-slate-400">
                             <AlertCircle className="w-4 h-4 shrink-0" aria-hidden="true" />
                             <span>Expirado</span>
                           </span>
@@ -422,7 +427,7 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
                               type="button"
                               disabled={processingDonationId === doacao.id_doacao}
                               onClick={() => handleFallbackVerify(doacao.id_doacao)}
-                              className="min-h-[38px] px-3 py-1.5 rounded-lg bg-sky-700 hover:bg-sky-800 text-white text-xs font-semibold cursor-pointer"
+                              className="min-h-[38px] px-3 py-1.5 rounded-lg bg-sky-700 hover:bg-sky-800 dark:bg-sky-600 dark:hover:bg-sky-500 text-white text-xs font-semibold cursor-pointer"
                             >
                               Verificar Pix
                             </button>
@@ -430,13 +435,15 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
                               type="button"
                               disabled={processingDonationId === doacao.id_doacao}
                               onClick={() => handleExpireDonation(doacao.id_doacao)}
-                              className="min-h-[38px] px-2.5 py-1.5 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-100 text-xs font-medium cursor-pointer"
+                              className="min-h-[38px] px-2.5 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-medium cursor-pointer"
                             >
                               Expirar
                             </button>
                           </div>
                         ) : (
-                          <span className="font-mono text-xs text-slate-400">{doacao.txid}</span>
+                          <span className="font-mono text-xs text-slate-400 dark:text-slate-500">
+                            {doacao.txid}
+                          </span>
                         )}
                       </td>
                     </tr>
@@ -454,16 +461,16 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
           {showCreateForm && (
             <form
               onSubmit={handleCreateCampaign}
-              className="bg-white border border-slate-200 rounded-2xl p-6 space-y-4"
+              className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 space-y-4"
             >
-              <h2 className="font-display text-lg font-bold text-slate-900">
+              <h2 className="font-display text-lg font-bold text-slate-900 dark:text-slate-100">
                 Cadastrar Nova Campanha
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label
                     htmlFor="new-campaign-title"
-                    className="block text-sm font-semibold text-slate-900 mb-1"
+                    className="block text-sm font-semibold text-slate-900 dark:text-slate-100 mb-1"
                   >
                     Título único da campanha
                   </label>
@@ -474,13 +481,13 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
                     value={newTitle}
                     onChange={(e) => setNewTitle(e.target.value)}
                     placeholder="Ex: Campanha de Inverno 2026"
-                    className="w-full min-h-[44px] px-3.5 py-2 border border-slate-300 rounded-xl text-sm text-slate-900 focus:border-sky-700 focus:outline-none"
+                    className="w-full min-h-[44px] px-3.5 py-2 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 focus:border-sky-700 dark:focus:border-sky-500 focus:outline-none"
                   />
                 </div>
                 <div>
                   <label
                     htmlFor="new-campaign-goal"
-                    className="block text-sm font-semibold text-slate-900 mb-1"
+                    className="block text-sm font-semibold text-slate-900 dark:text-slate-100 mb-1"
                   >
                     Meta financeira (R$)
                   </label>
@@ -493,14 +500,14 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
                     value={newGoal}
                     onChange={(e) => setNewGoal(e.target.value)}
                     placeholder="Ex: 5000"
-                    className="w-full min-h-[44px] px-3.5 py-2 border border-slate-300 rounded-xl font-mono text-sm text-slate-900 focus:border-sky-700 focus:outline-none"
+                    className="w-full min-h-[44px] px-3.5 py-2 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl font-mono text-sm text-slate-900 dark:text-slate-100 focus:border-sky-700 dark:focus:border-sky-500 focus:outline-none"
                   />
                 </div>
               </div>
               <div>
                 <label
                   htmlFor="new-campaign-desc"
-                  className="block text-sm font-semibold text-slate-900 mb-1"
+                  className="block text-sm font-semibold text-slate-900 dark:text-slate-100 mb-1"
                 >
                   Descrição curta (opcional)
                 </label>
@@ -510,21 +517,21 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
                   value={newDesc}
                   onChange={(e) => setNewDesc(e.target.value)}
                   placeholder="Explique o objetivo da arrecadação para os doadores."
-                  className="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm text-slate-900 focus:border-sky-700 focus:outline-none"
+                  className="w-full px-3.5 py-2 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 focus:border-sky-700 dark:focus:border-sky-500 focus:outline-none"
                 />
               </div>
               <div className="flex items-center gap-3">
                 <button
                   type="submit"
                   disabled={isCreating}
-                  className="min-h-[44px] px-5 py-2 rounded-xl bg-sky-700 hover:bg-sky-800 text-white text-sm font-semibold cursor-pointer"
+                  className="min-h-[44px] px-5 py-2 rounded-xl bg-sky-700 hover:bg-sky-800 dark:bg-sky-600 dark:hover:bg-sky-500 text-white text-sm font-semibold cursor-pointer"
                 >
                   {isCreating ? 'Salvando...' : 'Salvar Campanha'}
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowCreateForm(false)}
-                  className="min-h-[44px] px-4 py-2 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100 cursor-pointer"
+                  className="min-h-[44px] px-4 py-2 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
                 >
                   Cancelar
                 </button>
@@ -532,35 +539,45 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
             </form>
           )}
 
-          <div className="bg-white border border-slate-200 rounded-2xl divide-y divide-slate-200">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl divide-y divide-slate-200 dark:divide-slate-800">
             {data.campanhas.map((camp) => (
               <div
                 key={camp.id_campanha}
                 className="p-5 sm:p-6 flex flex-col lg:flex-row lg:items-center justify-between gap-4"
               >
                 <div className="space-y-1.5 flex-1 min-w-0">
-                  <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-slate-500">
+                  <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-slate-500 dark:text-slate-400">
                     <span className="font-mono">ID #{camp.id_campanha}</span>
                     <span aria-hidden="true">·</span>
-                    <span className={camp.status_ativa ? 'text-emerald-800 font-semibold' : 'text-slate-600'}>
+                    <span
+                      className={
+                        camp.status_ativa
+                          ? 'text-emerald-800 dark:text-emerald-400 font-semibold'
+                          : 'text-slate-600 dark:text-slate-400'
+                      }
+                    >
                       {camp.status_ativa ? 'Ativa no portal público' : 'Pausada'}
                     </span>
                   </div>
-                  <h3 className="font-display text-lg font-bold text-slate-900">{camp.titulo}</h3>
+                  <h3 className="font-display text-lg font-bold text-slate-900 dark:text-slate-100">
+                    {camp.titulo}
+                  </h3>
                   {camp.descricao && (
-                    <p className="text-sm text-slate-600 line-clamp-2">{camp.descricao}</p>
+                    <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-2">
+                      {camp.descricao}
+                    </p>
                   )}
 
                   <div className="pt-2 max-w-md">
-                    <div className="flex justify-between text-xs font-mono text-slate-700 mb-1 tabular-nums">
+                    <div className="flex justify-between text-xs font-mono text-slate-700 dark:text-slate-300 mb-1 tabular-nums">
                       <span>Arrecadado: {formatBRL(camp.valor_arrecadado)}</span>
                       <span>
                         Meta: {formatBRL(camp.meta_financeira)} ({camp.percentual_atingido}%)
                       </span>
                     </div>
-                    <div className="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden">
+                    <div className="w-full h-2.5 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-sky-700"
+                        className="h-full bg-sky-700 dark:bg-sky-500"
                         style={{ width: `${camp.percentual_atingido}%` }}
                       />
                     </div>
@@ -571,7 +588,7 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
                   <button
                     type="button"
                     onClick={() => handleToggleCampaignActive(camp.id_campanha, camp.status_ativa)}
-                    className="min-h-[44px] px-4 py-2 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-sm font-semibold text-slate-800 cursor-pointer"
+                    className="min-h-[44px] px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-sm font-semibold text-slate-800 dark:text-slate-100 cursor-pointer"
                   >
                     {camp.status_ativa ? 'Pausar' : 'Ativar'}
                   </button>
@@ -588,7 +605,7 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
                       <button
                         type="button"
                         onClick={() => setConfirmDeleteId(null)}
-                        className="min-h-[44px] px-3 py-2 rounded-xl border border-slate-300 text-sm font-medium text-slate-700 cursor-pointer"
+                        className="min-h-[44px] px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-sm font-medium text-slate-700 dark:text-slate-300 cursor-pointer"
                       >
                         Cancelar
                       </button>
@@ -598,7 +615,7 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
                       type="button"
                       onClick={() => setConfirmDeleteId(camp.id_campanha)}
                       aria-label={`Excluir campanha ${camp.titulo}`}
-                      className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center px-3 py-2 rounded-xl border border-slate-300 text-red-700 hover:bg-red-50 cursor-pointer"
+                      className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/50 cursor-pointer"
                     >
                       <Trash2 className="w-4 h-4" aria-hidden="true" />
                     </button>

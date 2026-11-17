@@ -51,18 +51,18 @@ export const PixFaqAccordion: React.FC = () => {
     <section
       id="duvidas-pix"
       aria-labelledby="faq-heading"
-      className="max-w-6xl mx-auto px-4 sm:px-6 pt-10 pb-6 border-t border-slate-200"
+      className="max-w-6xl mx-auto px-4 sm:px-6 pt-10 pb-6 border-t border-slate-200 dark:border-slate-800"
     >
       <div className="mb-6">
-        <h2 id="faq-heading" className="font-display text-2xl font-bold text-slate-900">
+        <h2 id="faq-heading" className="font-display text-2xl font-bold text-slate-900 dark:text-slate-100">
           Dúvidas frequentes sobre a doação Pix
         </h2>
-        <p className="text-sm sm:text-base text-slate-600 mt-1">
+        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 mt-1">
           Informações rápidas para concluir seu apoio com segurança e sem complicações.
         </p>
       </div>
 
-      <div className="bg-white border border-slate-200 rounded-2xl divide-y divide-slate-200 overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl divide-y divide-slate-200 dark:divide-slate-800 overflow-hidden">
         {PIX_FAQ_ITEMS.map((item) => {
           const isOpen = openId === item.id;
           const buttonId = `faq-trigger-${item.id}`;
@@ -76,14 +76,14 @@ export const PixFaqAccordion: React.FC = () => {
                 aria-expanded={isOpen}
                 aria-controls={panelId}
                 onClick={() => toggleItem(item.id)}
-                className="w-full min-h-[56px] px-5 sm:px-6 py-4 flex items-center justify-between gap-4 text-left hover:bg-slate-50 transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-sky-700"
+                className="w-full min-h-[56px] px-5 sm:px-6 py-4 flex items-center justify-between gap-4 text-left hover:bg-slate-50 dark:hover:bg-slate-800/70 transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-sky-700"
               >
-                <span className="font-display text-base font-semibold text-slate-900 leading-snug">
+                <span className="font-display text-base font-semibold text-slate-900 dark:text-slate-100 leading-snug">
                   {item.question}
                 </span>
                 <ChevronDown
-                  className={`w-5 h-5 text-slate-600 shrink-0 transition-transform duration-200 ${
-                    isOpen ? 'rotate-180 text-sky-700' : ''
+                  className={`w-5 h-5 text-slate-600 dark:text-slate-400 shrink-0 transition-transform duration-200 ${
+                    isOpen ? 'rotate-180 text-sky-700 dark:text-sky-400' : ''
                   }`}
                   aria-hidden="true"
                 />
@@ -94,7 +94,7 @@ export const PixFaqAccordion: React.FC = () => {
                   id={panelId}
                   role="region"
                   aria-labelledby={buttonId}
-                  className="px-5 sm:px-6 pb-5 pt-1 text-sm sm:text-base text-slate-700 leading-relaxed max-w-3xl"
+                  className="px-5 sm:px-6 pb-5 pt-1 text-sm sm:text-base text-slate-700 dark:text-slate-300 leading-relaxed max-w-3xl"
                 >
                   {item.answer}
                 </div>

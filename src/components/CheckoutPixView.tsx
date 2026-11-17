@@ -108,27 +108,27 @@ export const CheckoutPixView: React.FC<CheckoutPixViewProps> = ({
       <button
         type="button"
         onClick={onBack}
-        className="min-h-[44px] inline-flex items-center gap-2 px-3 py-2 -ml-3 text-sm font-semibold text-slate-700 hover:text-slate-900 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-sky-700"
+        className="min-h-[44px] inline-flex items-center gap-2 px-3 py-2 -ml-3 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-sky-700"
       >
         <ArrowLeft className="w-4 h-4" aria-hidden="true" />
         <span>Voltar para a campanha</span>
       </button>
 
-      <section className="mt-4 bg-white border border-slate-200 rounded-2xl p-6 sm:p-8">
+      <section className="mt-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8">
         {/* Header confirming donation intention */}
-        <div className="pb-6 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div className="pb-6 border-b border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
-            <p className="text-xs font-medium text-slate-500">
+            <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
               Campanha · {checkout.campanha_titulo}
             </p>
-            <h1 className="mt-1 font-display text-2xl sm:text-3xl font-bold text-slate-900 tabular-nums">
+            <h1 className="mt-1 font-display text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100 tabular-nums">
               Sua doação: {formatBRL(checkout.valor_doacao)}
             </h1>
           </div>
 
           <div className="text-left sm:text-right">
-            <p className="text-xs text-slate-500">Recebedor direto</p>
-            <p className="text-sm font-semibold text-slate-900">O.S.C Amigos da Mara</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Recebedor direto</p>
+            <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">O.S.C Amigos da Mara</p>
           </div>
         </div>
 
@@ -137,17 +137,17 @@ export const CheckoutPixView: React.FC<CheckoutPixViewProps> = ({
           {status === 'aprovado' ? (
             <div
               role="status"
-              className="flex items-start gap-3 p-4 rounded-xl bg-emerald-50 border border-emerald-600 text-emerald-950"
+              className="flex items-start gap-3 p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-600 dark:border-emerald-700 text-emerald-950 dark:text-emerald-100"
             >
               <CheckCircle2
-                className="w-6 h-6 text-emerald-700 shrink-0 mt-0.5"
+                className="w-6 h-6 text-emerald-700 dark:text-emerald-400 shrink-0 mt-0.5"
                 aria-hidden="true"
               />
               <div>
                 <p className="font-display font-bold text-base">
                   Pagamento aprovado! Obrigado pelo apoio.
                 </p>
-                <p className="text-sm text-emerald-900 mt-0.5">
+                <p className="text-sm text-emerald-900 dark:text-emerald-200 mt-0.5">
                   Sua contribuição já foi contabilizada na barra de metas da campanha.
                 </p>
               </div>
@@ -155,14 +155,14 @@ export const CheckoutPixView: React.FC<CheckoutPixViewProps> = ({
           ) : (
             <div
               role="status"
-              className="flex items-start gap-3 p-4 rounded-xl bg-sky-50 border border-sky-200 text-sky-950"
+              className="flex items-start gap-3 p-4 rounded-xl bg-sky-50 dark:bg-sky-950/50 border border-sky-200 dark:border-sky-800 text-sky-950 dark:text-sky-100"
             >
-              <Clock className="w-5 h-5 text-sky-700 shrink-0 mt-0.5" aria-hidden="true" />
+              <Clock className="w-5 h-5 text-sky-700 dark:text-sky-400 shrink-0 mt-0.5" aria-hidden="true" />
               <div>
                 <p className="font-semibold text-sm">
                   Aguardando pagamento no aplicativo do seu banco
                 </p>
-                <p className="text-xs text-sky-900 mt-0.5">
+                <p className="text-xs text-sky-900 dark:text-sky-200 mt-0.5">
                   Assim que você concluir o Pix, a confirmação aparecerá automaticamente no painel.
                 </p>
               </div>
@@ -174,7 +174,7 @@ export const CheckoutPixView: React.FC<CheckoutPixViewProps> = ({
         <div className="mt-6">
           <label
             htmlFor="donor-name-input"
-            className="block text-sm font-semibold text-slate-900"
+            className="block text-sm font-semibold text-slate-900 dark:text-slate-100"
           >
             Nome ou Apelido (opcional)
           </label>
@@ -186,12 +186,12 @@ export const CheckoutPixView: React.FC<CheckoutPixViewProps> = ({
             onChange={(e) => setDonorName(e.target.value)}
             onBlur={() => syncDonorNameIfNeeded(donorName)}
             placeholder="Ex: Maria Silva"
-            className="mt-1.5 w-full min-h-[48px] px-4 py-2.5 bg-white border border-slate-300 focus:border-sky-700 rounded-xl text-base text-slate-900 focus:outline-none"
+            className="mt-1.5 w-full min-h-[48px] px-4 py-2.5 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-sky-700 dark:focus:border-sky-500 rounded-xl text-base text-slate-900 dark:text-slate-100 focus:outline-none"
           />
-          <div className="mt-1.5 flex items-center justify-between gap-2 text-xs text-slate-600">
+          <div className="mt-1.5 flex items-center justify-between gap-2 text-xs text-slate-600 dark:text-slate-400">
             <span>Deixe em branco para doar anonimamente.</span>
             {savedNameNotice && (
-              <span className="inline-flex items-center gap-1 font-medium text-emerald-800">
+              <span className="inline-flex items-center gap-1 font-medium text-emerald-800 dark:text-emerald-400">
                 <Check className="w-3.5 h-3.5" aria-hidden="true" />
                 Nome salvo
               </span>
@@ -201,13 +201,13 @@ export const CheckoutPixView: React.FC<CheckoutPixViewProps> = ({
 
         {/* QR Code & Read-Only Copia e Cola */}
         <div className="mt-7 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-          <div className="md:col-span-5 flex flex-col items-center justify-center p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+          <div className="md:col-span-5 flex flex-col items-center justify-center p-4 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-2xl">
             <img
               src={checkout.qr_code_data_url}
               alt={`QR Code Pix no valor de ${formatBRL(checkout.valor_doacao)} para O.S.C Amigos da Mara`}
               className="w-52 h-52 sm:w-56 sm:h-56 bg-white p-2 rounded-xl border border-slate-200"
             />
-            <p className="mt-2.5 text-xs font-medium text-slate-600 text-center">
+            <p className="mt-2.5 text-xs font-medium text-slate-600 dark:text-slate-300 text-center">
               Escaneie no app do banco ou use o botão abaixo
             </p>
           </div>
@@ -216,7 +216,7 @@ export const CheckoutPixView: React.FC<CheckoutPixViewProps> = ({
             <div>
               <label
                 htmlFor="pix-copia-cola-input"
-                className="block text-sm font-semibold text-slate-900 mb-1.5"
+                className="block text-sm font-semibold text-slate-900 dark:text-slate-100 mb-1.5"
               >
                 Código Pix Copia e Cola
               </label>
@@ -227,7 +227,7 @@ export const CheckoutPixView: React.FC<CheckoutPixViewProps> = ({
                 value={checkout.codigo_pix_gerado}
                 aria-readonly="true"
                 onClick={(e) => (e.target as HTMLInputElement).select()}
-                className="w-full min-h-[48px] px-3.5 py-2.5 bg-slate-100 border border-slate-300 rounded-xl font-mono text-xs text-slate-800 select-all focus:outline-none focus:border-sky-700"
+                className="w-full min-h-[48px] px-3.5 py-2.5 bg-slate-100 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl font-mono text-xs text-slate-800 dark:text-slate-200 select-all focus:outline-none focus:border-sky-700 dark:focus:border-sky-500"
               />
             </div>
 
@@ -235,7 +235,7 @@ export const CheckoutPixView: React.FC<CheckoutPixViewProps> = ({
             <button
               type="button"
               onClick={handleCopyPix}
-              className="w-full min-h-[56px] px-6 py-3.5 rounded-xl bg-sky-700 hover:bg-sky-800 active:scale-[0.99] text-white font-display text-lg font-bold flex items-center justify-center gap-2.5 transition-all cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700"
+              className="w-full min-h-[56px] px-6 py-3.5 rounded-xl bg-sky-700 hover:bg-sky-800 dark:bg-sky-600 dark:hover:bg-sky-500 active:scale-[0.99] text-white font-display text-lg font-bold flex items-center justify-center gap-2.5 transition-all cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700"
             >
               {copied ? (
                 <>
@@ -254,21 +254,21 @@ export const CheckoutPixView: React.FC<CheckoutPixViewProps> = ({
               <div
                 role="status"
                 aria-live="polite"
-                className="flex items-center gap-2.5 p-3.5 rounded-xl bg-emerald-50 border border-emerald-600 text-emerald-950 text-sm font-semibold"
+                className="flex items-center gap-2.5 p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-600 dark:border-emerald-700 text-emerald-950 dark:text-emerald-100 text-sm font-semibold"
               >
-                <CheckCircle2 className="w-5 h-5 text-emerald-700 shrink-0" aria-hidden="true" />
+                <CheckCircle2 className="w-5 h-5 text-emerald-700 dark:text-emerald-400 shrink-0" aria-hidden="true" />
                 <span>Código copiado! Agora abra o aplicativo do seu banco e escolha Pix Copia e Cola.</span>
               </div>
             )}
 
             {actionError && (
-              <p role="alert" className="text-sm font-medium text-red-700">
+              <p role="alert" className="text-sm font-medium text-red-700 dark:text-red-400">
                 {actionError}
               </p>
             )}
 
-            <div className="pt-2 flex items-center gap-2 text-xs text-slate-500">
-              <ShieldCheck className="w-4 h-4 text-slate-600 shrink-0" aria-hidden="true" />
+            <div className="pt-2 flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+              <ShieldCheck className="w-4 h-4 text-slate-600 dark:text-slate-400 shrink-0" aria-hidden="true" />
               <span>
                 Identificador da transação: <span className="font-mono">{checkout.txid}</span>
               </span>
@@ -278,12 +278,12 @@ export const CheckoutPixView: React.FC<CheckoutPixViewProps> = ({
 
         {/* Staging / Validation Webhook Trigger */}
         {status !== 'aprovado' && (
-          <div className="mt-8 pt-6 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <p className="text-xs font-semibold text-slate-800">
+              <p className="text-xs font-semibold text-slate-800 dark:text-slate-200">
                 Validação em Ambiente de Homologação
               </p>
-              <p className="text-xs text-slate-600 mt-0.5">
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
                 Simule o recebimento do webhook bancário para atualizar a barra de metas e o painel administrativo.
               </p>
             </div>
@@ -291,7 +291,7 @@ export const CheckoutPixView: React.FC<CheckoutPixViewProps> = ({
               type="button"
               onClick={handleSimulateBankPayment}
               disabled={isSimulating}
-              className="min-h-[44px] px-4 py-2.5 rounded-xl border border-slate-300 bg-slate-50 hover:bg-slate-100 text-sm font-semibold text-slate-900 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-2 focus-visible:outline-sky-700"
+              className="min-h-[44px] px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-sm font-semibold text-slate-900 dark:text-slate-100 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-2 focus-visible:outline-sky-700"
             >
               {isSimulating ? 'Confirmando...' : 'Simular Pagamento Pix'}
             </button>
