@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { AlertCircle, ArrowRight, HeartHandshake, QrCode, ShieldCheck } from 'lucide-react';
 import { CampanhaPublica } from '../types.ts';
 import { formatBRL, formatBRLCompact, formatDateTimeBR } from '../utils/format.ts';
+import { PixFaqAccordion } from './PixFaqAccordion.tsx';
 
 interface CampaignPublicViewProps {
   campanhas: CampanhaPublica[];
@@ -454,6 +455,8 @@ export const CampaignPublicView: React.FC<CampaignPublicViewProps> = ({
           </div>
         )}
       </section>
+
+      <PixFaqAccordion />
     </main>
   );
 };
