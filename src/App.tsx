@@ -5,19 +5,30 @@ import { AdminLoginView } from './components/AdminLoginView.tsx';
 import { CampaignPublicView } from './components/CampaignPublicView.tsx';
 import { CheckoutPixView } from './components/CheckoutPixView.tsx';
 import { ActiveRoute, TopBar } from './components/TopBar.tsx';
-import { ApiService } from './services/api.ts';
+import { ApiService, isStaticBackendMode } from './services/api.ts';
 import { AdminUser, CampanhaPublica, PixCheckoutResponse } from './types.ts';
 
-function resolveRouteFromPath(pathname: string): ActiveRoute {
+function resolveRouteFromLocation(): ActiveRoute {
+  const hash = window.location.hash || '';
+  if (hash.startsWith('#/admin')) return 'admin';
+  if (hash.startsWith('#/checkout')) return 'checkout';
+
+  const pathname = window.location.pathname || '';
   if (pathname.startsWith('/admin')) return 'admin';
   if (pathname.startsWith('/checkout')) return 'checkout';
   return 'public';
 }
 
-export default function App() {
-  const [route, setRoute] = useState<ActiveRoute>(() =>
-    resolveRouteFromPath(window.location.pathname)
+function shouldUseHashNavigation(): boolean {
+  return (
+    isStaticBackendMode() ||
+    import.meta.env.BASE_URL === './' ||
+    window.location.hostname.endsWith('github.io')
   );
+}
+
+export default function App() {
+  const [route, setRoute] = useState<ActiveRoute>(() => resolveRouteFromLocation());
   const [campanhas, setCampanhas] = useState<CampanhaPublica[]>([]);
   const [selectedCampaignId, setSelectedCampaignId] = useState<number | null>(null);
   const [isLoadingCampaigns, setIsLoadingCampaigns] = useState<boolean>(true);
@@ -87,43 +98,66 @@ export default function App() {
     checkAdminSession();
   }, [loadCampaigns, checkAdminSession]);
 
-  // Listen to browser back/forward navigation
+  // Listen to browser back/forward and hash navigation
   useEffect(() => {
-    const handlePopState = () => {
-      const next = resolveRouteFromPath(window.location.pathname);
+    const handleLocationChange = () => {
+      const next = resolveRouteFromLocation();
       if (next === 'checkout' && !checkoutData) {
         setRoute('public');
         return;
       }
       setRoute(next);
     };
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
+    window.addEventListener('popstate', handleLocationChange);
+    window.addEventListener('hashchange', handleLocationChange);
+    return () => {
+      window.removeEventListener('popstate', handleLocationChange);
+      window.removeEventListener('hashchange', handleLocationChange);
+    };
   }, [checkoutData]);
 
-  // Real-time Server-Sent Events (RF02 + RF03)
+  // Real-time Server-Sent Events (RF02 + RF03) when backend server is active
   useEffect(() => {
-    const evtSource = new EventSource('/api/events');
+    if (isLoadingCampaigns || isStaticBackendMode()) {
+      return;
+    }
 
-    const handleRealtimeChange = () => {
-      loadCampaigns();
-      setAdminRefreshSignal((n) => n + 1);
-    };
+    let evtSource: EventSource | null = null;
+    try {
+      evtSource = new EventSource('/api/events');
 
-    evtSource.addEventListener('donation_approved', handleRealtimeChange);
-    evtSource.addEventListener('donation_created', () => {
-      setAdminRefreshSignal((n) => n + 1);
-    });
-    evtSource.addEventListener('donation_updated', handleRealtimeChange);
-    evtSource.addEventListener('campaign_updated', handleRealtimeChange);
+      const handleRealtimeChange = () => {
+        loadCampaigns();
+        setAdminRefreshSignal((n) => n + 1);
+      };
+
+      evtSource.addEventListener('donation_approved', handleRealtimeChange);
+      evtSource.addEventListener('donation_created', () => {
+        setAdminRefreshSignal((n) => n + 1);
+      });
+      evtSource.addEventListener('donation_updated', handleRealtimeChange);
+      evtSource.addEventListener('campaign_updated', handleRealtimeChange);
+      evtSource.onerror = () => {
+        if (isStaticBackendMode()) {
+          evtSource?.close();
+        }
+      };
+    } catch {
+      // Ignore SSE errors on static hosts
+    }
 
     return () => {
-      evtSource.close();
+      evtSource?.close();
     };
-  }, [loadCampaigns]);
+  }, [isLoadingCampaigns, loadCampaigns]);
 
   const navigateTo = (path: string, nextRoute: ActiveRoute) => {
-    if (window.location.pathname !== path) {
+    if (shouldUseHashNavigation()) {
+      const targetHash = path === '/' ? '#/' : `#${path}`;
+      if (window.location.hash !== targetHash) {
+        window.location.hash = targetHash;
+      }
+    } else if (window.location.pathname !== path) {
       window.history.pushState({}, '', path);
     }
     setRoute(nextRoute);

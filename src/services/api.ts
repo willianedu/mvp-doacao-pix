@@ -4,16 +4,52 @@ import {
   CampanhaPublica,
   PixCheckoutResponse,
 } from '../types.ts';
+import { StaticFallbackService } from './staticFallback.ts';
+
+let staticModeDetected = false;
+
+export function isStaticBackendMode(): boolean {
+  return staticModeDetected;
+}
+
+class StaticHostUnavailableError extends Error {
+  constructor() {
+    super('STATIC_HOST_MODE');
+  }
+}
 
 async function requestJson<T>(url: string, options?: RequestInit): Promise<T> {
-  const response = await fetch(url, {
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-      ...(options?.headers || {}),
-    },
-    ...options,
-  });
+  if (staticModeDetected) {
+    throw new StaticHostUnavailableError();
+  }
+
+  let response: Response;
+  try {
+    response = await fetch(url, {
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(options?.headers || {}),
+      },
+      ...options,
+    });
+  } catch {
+    // Only fall back to static mode if hosted on static hosting (e.g. GitHub Pages)
+    if (typeof window !== 'undefined' && window.location.hostname.endsWith('github.io')) {
+      staticModeDetected = true;
+      throw new StaticHostUnavailableError();
+    }
+    throw new Error('Erro de conexão com o servidor.');
+  }
+
+  const contentType = response.headers.get('content-type') || '';
+  const isJson = contentType.includes('application/json');
+
+  // Static hosts like GitHub Pages respond 404/405 with text/html for /api/* routes
+  if (!isJson && (response.status === 404 || response.status === 405)) {
+    staticModeDetected = true;
+    throw new StaticHostUnavailableError();
+  }
 
   const data = await response.json().catch(() => ({}));
   if (!response.ok) {
@@ -29,9 +65,26 @@ async function requestJson<T>(url: string, options?: RequestInit): Promise<T> {
   return data as T;
 }
 
+async function withStaticFallback<T>(
+  apiCall: () => Promise<T>,
+  fallbackCall: () => Promise<T> | T
+): Promise<T> {
+  try {
+    return await apiCall();
+  } catch (err) {
+    if (err instanceof StaticHostUnavailableError) {
+      return await fallbackCall();
+    }
+    throw err;
+  }
+}
+
 export const ApiService = {
   getPublicCampaigns(): Promise<{ campanhas: CampanhaPublica[] }> {
-    return requestJson('/api/campanhas');
+    return withStaticFallback(
+      () => requestJson('/api/campanhas'),
+      () => StaticFallbackService.getPublicCampaigns()
+    );
   },
 
   createPixDonation(payload: {
@@ -39,24 +92,35 @@ export const ApiService = {
     valor_doacao: number;
     nome_doador?: string;
   }): Promise<PixCheckoutResponse> {
-    return requestJson('/api/doacoes/pix', {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    });
+    return withStaticFallback(
+      () =>
+        requestJson('/api/doacoes/pix', {
+          method: 'POST',
+          body: JSON.stringify(payload),
+        }),
+      () => StaticFallbackService.createPixDonation(payload)
+    );
   },
 
   updateDonationName(idDoacao: number, nomeDoador: string): Promise<{
     id_doacao: number;
     nome_doador: string | null;
   }> {
-    return requestJson(`/api/doacoes/${idDoacao}/nome`, {
-      method: 'PATCH',
-      body: JSON.stringify({ nome_doador: nomeDoador }),
-    });
+    return withStaticFallback(
+      () =>
+        requestJson(`/api/doacoes/${idDoacao}/nome`, {
+          method: 'PATCH',
+          body: JSON.stringify({ nome_doador: nomeDoador }),
+        }),
+      () => StaticFallbackService.updateDonationName(idDoacao, nomeDoador)
+    );
   },
 
   getDonationStatus(idDoacao: number): Promise<PixCheckoutResponse & { updated_at: string }> {
-    return requestJson(`/api/doacoes/${idDoacao}/status`);
+    return withStaticFallback(
+      () => requestJson(`/api/doacoes/${idDoacao}/status`),
+      () => StaticFallbackService.getDonationStatus(idDoacao)
+    );
   },
 
   simulateWebhookApproval(payload: { id_doacao: number; txid: string }): Promise<{
@@ -65,34 +129,49 @@ export const ApiService = {
     status_pagamento: string;
     valor_arrecadado: number;
   }> {
-    return requestJson('/api/webhooks/mercadopago', {
-      method: 'POST',
-      body: JSON.stringify({
-        id_doacao: payload.id_doacao,
-        txid: payload.txid,
-        status: 'approved',
-      }),
-    });
+    return withStaticFallback(
+      () =>
+        requestJson('/api/webhooks/mercadopago', {
+          method: 'POST',
+          body: JSON.stringify({
+            id_doacao: payload.id_doacao,
+            txid: payload.txid,
+            status: 'approved',
+          }),
+        }),
+      () => StaticFallbackService.simulateWebhookApproval(payload)
+    );
   },
 
   getAuthMe(): Promise<{ authenticated: boolean; admin: AdminUser | null }> {
-    return requestJson('/api/auth/me');
+    return withStaticFallback(
+      () => requestJson('/api/auth/me'),
+      () => StaticFallbackService.getAuthMe()
+    );
   },
 
   loginAdmin(email: string, senha: string): Promise<{
     authenticated: boolean;
     admin: AdminUser;
   }> {
-    return requestJson('/api/auth/login', {
-      method: 'POST',
-      body: JSON.stringify({ email, senha }),
-    });
+    return withStaticFallback(
+      () =>
+        requestJson('/api/auth/login', {
+          method: 'POST',
+          body: JSON.stringify({ email, senha }),
+        }),
+      () => StaticFallbackService.loginAdmin(email, senha)
+    );
   },
 
   logoutAdmin(): Promise<{ authenticated: boolean }> {
-    return requestJson('/api/auth/logout', {
-      method: 'POST',
-    });
+    return withStaticFallback(
+      () =>
+        requestJson('/api/auth/logout', {
+          method: 'POST',
+        }),
+      () => StaticFallbackService.logoutAdmin()
+    );
   },
 
   getAdminDashboard(params?: {
@@ -107,28 +186,42 @@ export const ApiService = {
       query.set('search', params.search.trim());
     }
     const qs = query.toString();
-    return requestJson(`/api/admin/dashboard${qs ? `?${qs}` : ''}`);
+    return withStaticFallback(
+      () => requestJson(`/api/admin/dashboard${qs ? `?${qs}` : ''}`),
+      () => StaticFallbackService.getAdminDashboard(params)
+    );
   },
 
   getAdminDailyClosing(): Promise<{
     fecho_caixa: AdminDashboardData['fecho_caixa'];
   }> {
-    return requestJson('/api/admin/fecho-caixa');
+    return withStaticFallback(
+      () => requestJson('/api/admin/fecho-caixa'),
+      () => ({ fecho_caixa: StaticFallbackService.getAdminDashboard().fecho_caixa })
+    );
   },
 
   verifyDonationFallback(idDoacao: number): Promise<{
     updated: boolean;
     message: string;
   }> {
-    return requestJson(`/api/admin/doacoes/${idDoacao}/verificar`, {
-      method: 'POST',
-    });
+    return withStaticFallback(
+      () =>
+        requestJson(`/api/admin/doacoes/${idDoacao}/verificar`, {
+          method: 'POST',
+        }),
+      () => StaticFallbackService.verifyDonationFallback(idDoacao)
+    );
   },
 
   expireDonation(idDoacao: number): Promise<{ donation: unknown }> {
-    return requestJson(`/api/admin/doacoes/${idDoacao}/expirar`, {
-      method: 'POST',
-    });
+    return withStaticFallback(
+      () =>
+        requestJson(`/api/admin/doacoes/${idDoacao}/expirar`, {
+          method: 'POST',
+        }),
+      () => StaticFallbackService.expireDonation(idDoacao)
+    );
   },
 
   createCampaign(payload: {
@@ -137,10 +230,14 @@ export const ApiService = {
     meta_financeira: number;
     imagem_url?: string;
   }): Promise<{ campanha: unknown }> {
-    return requestJson('/api/admin/campanhas', {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    });
+    return withStaticFallback(
+      () =>
+        requestJson('/api/admin/campanhas', {
+          method: 'POST',
+          body: JSON.stringify(payload),
+        }),
+      () => StaticFallbackService.createCampaign(payload)
+    );
   },
 
   updateCampaign(
@@ -152,15 +249,23 @@ export const ApiService = {
       status_ativa?: boolean;
     }
   ): Promise<{ campanha: unknown }> {
-    return requestJson(`/api/admin/campanhas/${idCampanha}`, {
-      method: 'PATCH',
-      body: JSON.stringify(payload),
-    });
+    return withStaticFallback(
+      () =>
+        requestJson(`/api/admin/campanhas/${idCampanha}`, {
+          method: 'PATCH',
+          body: JSON.stringify(payload),
+        }),
+      () => StaticFallbackService.updateCampaign(idCampanha, payload)
+    );
   },
 
   deleteCampaign(idCampanha: number): Promise<{ deleted: boolean }> {
-    return requestJson(`/api/admin/campanhas/${idCampanha}`, {
-      method: 'DELETE',
-    });
+    return withStaticFallback(
+      () =>
+        requestJson(`/api/admin/campanhas/${idCampanha}`, {
+          method: 'DELETE',
+        }),
+      () => StaticFallbackService.deleteCampaign(idCampanha)
+    );
   },
 };

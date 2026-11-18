@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { AlertCircle, ArrowRight, HeartHandshake, QrCode, ShieldCheck } from 'lucide-react';
 import { CampanhaPublica } from '../types.ts';
-import { formatBRL, formatBRLCompact, formatDateTimeBR } from '../utils/format.ts';
+import { formatBRL, formatBRLCompact, formatDateTimeBR, resolveAssetUrl } from '../utils/format.ts';
 import { PixFaqAccordion } from './PixFaqAccordion.tsx';
 import { SocialLinksSection } from './SocialLinksSection.tsx';
 
@@ -116,7 +116,8 @@ export const CampaignPublicView: React.FC<CampaignPublicViewProps> = ({
   }
 
   const pct = activeCampaign.percentual_atingido;
-  const imgBroken = !activeCampaign.imagem_url || imageFailed[activeCampaign.id_campanha];
+  const resolvedImageUrl = resolveAssetUrl(activeCampaign.imagem_url);
+  const imgBroken = !resolvedImageUrl || imageFailed[activeCampaign.id_campanha];
 
   return (
     <main className="pb-16">
@@ -327,9 +328,9 @@ export const CampaignPublicView: React.FC<CampaignPublicViewProps> = ({
           {/* Right Column: Editorial Campaign Photography */}
           <div className="lg:col-span-6 flex flex-col">
             <div className="relative flex-1 min-h-[260px] lg:min-h-full rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900">
-              {!imgBroken ? (
+              {!imgBroken && resolvedImageUrl ? (
                 <img
-                  src={activeCampaign.imagem_url!}
+                  src={resolvedImageUrl}
                   alt={`Ação comunitária da campanha ${activeCampaign.titulo} - O.S.C Amigos da Mara`}
                   referrerPolicy="no-referrer"
                   onError={() =>
