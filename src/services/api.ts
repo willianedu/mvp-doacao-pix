@@ -110,6 +110,12 @@ export const ApiService = {
     return requestJson(`/api/admin/dashboard${qs ? `?${qs}` : ''}`);
   },
 
+  getAdminDailyClosing(): Promise<{
+    fecho_caixa: AdminDashboardData['fecho_caixa'];
+  }> {
+    return requestJson('/api/admin/fecho-caixa');
+  },
+
   verifyDonationFallback(idDoacao: number): Promise<{
     updated: boolean;
     message: string;

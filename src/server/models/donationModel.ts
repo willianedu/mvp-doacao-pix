@@ -255,4 +255,49 @@ export const DonationModel = {
       taxa_conversao: taxaConversao,
     };
   },
+
+  getDailyClosing(targetDate?: string): {
+    total_hoje: number;
+    quantidade_hoje: number;
+    data_referencia: string;
+  } {
+    const statusAprovado: StatusPagamento = 'aprovado';
+    const row = targetDate
+      ? (db
+          .prepare(
+            `SELECT
+               COALESCE(SUM(valor_doacao), 0) AS total_hoje,
+               COUNT(*) AS quantidade_hoje,
+               DATE(?) AS data_referencia
+             FROM doacoes
+             WHERE status_pagamento = ?
+               AND DATE(created_at) = DATE(?)`
+          )
+          .get(targetDate, statusAprovado, targetDate) as {
+          total_hoje: number;
+          quantidade_hoje: number;
+          data_referencia: string;
+        })
+      : (db
+          .prepare(
+            `SELECT
+               COALESCE(SUM(valor_doacao), 0) AS total_hoje,
+               COUNT(*) AS quantidade_hoje,
+               CURRENT_DATE AS data_referencia
+             FROM doacoes
+             WHERE status_pagamento = ?
+               AND DATE(created_at) = CURRENT_DATE`
+          )
+          .get(statusAprovado) as {
+          total_hoje: number;
+          quantidade_hoje: number;
+          data_referencia: string;
+        });
+
+    return {
+      total_hoje: row.total_hoje,
+      quantidade_hoje: row.quantidade_hoje,
+      data_referencia: row.data_referencia,
+    };
+  },
 };

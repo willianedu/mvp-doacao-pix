@@ -60,6 +60,7 @@ async function startServer() {
 
   // Protected Admin Routes (OWASP A01:2021 - Broken Access Control defense)
   app.get('/api/admin/dashboard', requireAdminAuth, AdminController.getDashboard);
+  app.get('/api/admin/fecho-caixa', requireAdminAuth, AdminController.getDailyClosing);
   app.post('/api/admin/doacoes/:id/verificar', requireAdminAuth, AdminController.verifyDonationFallback);
   app.post('/api/admin/doacoes/:id/expirar', requireAdminAuth, AdminController.expireDonation);
   app.post('/api/admin/campanhas', requireAdminAuth, AdminController.createCampaign);

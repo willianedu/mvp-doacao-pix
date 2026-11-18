@@ -30,16 +30,34 @@ export const AdminController = {
       });
 
       const metricas = DonationModel.getAdminMetrics();
+      const fecho_caixa = DonationModel.getDailyClosing();
 
       res.json({
         admin: req.admin,
         metricas,
+        fecho_caixa,
         campanhas,
         doacoes,
       });
     } catch (error) {
       console.error('Erro ao carregar painel administrativo:', error);
       res.status(500).json({ error: 'Erro ao carregar dados do painel administrativo.' });
+    }
+  },
+
+  getDailyClosing(req: AuthenticatedRequest, res: Response): void {
+    try {
+      const rawDate = typeof req.query.data === 'string' ? req.query.data.trim() : undefined;
+      if (rawDate && !/^\d{4}-\d{2}-\d{2}$/.test(rawDate)) {
+        res.status(400).json({ error: 'Formato de data inválido. Use AAAA-MM-DD.' });
+        return;
+      }
+
+      const fecho_caixa = DonationModel.getDailyClosing(rawDate);
+      res.json({ fecho_caixa });
+    } catch (error) {
+      console.error('Erro ao calcular fecho de caixa do dia:', error);
+      res.status(500).json({ error: 'Erro ao calcular fecho de caixa diário.' });
     }
   },
 

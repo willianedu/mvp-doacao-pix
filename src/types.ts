@@ -51,6 +51,12 @@ export interface DoacaoAdmin {
   updated_at: string;
 }
 
+export interface DailyClosingSummary {
+  total_hoje: number;
+  quantidade_hoje: number;
+  data_referencia: string;
+}
+
 export interface AdminDashboardData {
   admin: AdminUser;
   metricas: {
@@ -60,6 +66,7 @@ export interface AdminDashboardData {
     total_expiradas: number;
     taxa_conversao: number;
   };
+  fecho_caixa: DailyClosingSummary;
   campanhas: Array<Omit<CampanhaPublica, 'apoiadores_recentes'>>;
   doacoes: DoacaoAdmin[];
 }

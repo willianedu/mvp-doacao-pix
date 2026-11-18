@@ -7,6 +7,7 @@ import {
   RefreshCw,
   Search,
   Trash2,
+  Wallet,
 } from 'lucide-react';
 import { ApiService } from '../services/api.ts';
 import { AdminDashboardData } from '../types.ts';
@@ -319,7 +320,46 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
 
       {/* Tab 1: Últimas Doações */}
       {activeTab === 'doacoes' && (
-        <section className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
+        <div className="space-y-4">
+          {/* Card de Destaque: Fecho de Caixa do Dia */}
+          <section
+            aria-label="Fecho de caixa do dia"
+            className="bg-emerald-50/80 dark:bg-emerald-950/35 border border-emerald-200 dark:border-emerald-800/80 rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+          >
+            <div className="flex items-start sm:items-center gap-4">
+              <div className="w-11 h-11 rounded-xl bg-emerald-100 dark:bg-emerald-900/60 border border-emerald-200 dark:border-emerald-700/80 flex items-center justify-center text-emerald-800 dark:text-emerald-300 shrink-0">
+                <Wallet className="w-5 h-5" aria-hidden="true" />
+              </div>
+              <div>
+                <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-emerald-900/80 dark:text-emerald-300/90">
+                  <span>Fecho de Caixa do Dia</span>
+                  <span aria-hidden="true">·</span>
+                  <span className="font-mono tabular-nums">
+                    {data.fecho_caixa.data_referencia.split('-').reverse().join('/')}
+                  </span>
+                </div>
+                <h2 className="font-display text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-100 mt-0.5">
+                  Pix aprovados hoje
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 mt-0.5">
+                  {data.fecho_caixa.quantidade_hoje === 1
+                    ? '1 pagamento confirmado na data de hoje'
+                    : `${data.fecho_caixa.quantidade_hoje} pagamentos confirmados na data de hoje`}
+                </p>
+              </div>
+            </div>
+
+            <div className="sm:text-right shrink-0">
+              <p className="text-xs font-medium text-emerald-900 dark:text-emerald-300">
+                Total apurado hoje
+              </p>
+              <p className="font-mono text-2xl sm:text-3xl font-bold text-emerald-900 dark:text-emerald-300 tabular-nums mt-0.5">
+                {formatBRL(data.fecho_caixa.total_hoje)}
+              </p>
+            </div>
+          </section>
+
+          <section className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
           <div className="p-4 sm:p-5 border-b border-slate-200 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex flex-wrap items-center gap-1 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl">
               {(
@@ -453,6 +493,7 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
             </div>
           )}
         </section>
+        </div>
       )}
 
       {/* Tab 2: Gestão de Campanhas */}
