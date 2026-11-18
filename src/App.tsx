@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { ShieldAlert } from 'lucide-react';
 import { AdminDashboardView } from './components/AdminDashboardView.tsx';
 import { AdminLoginView } from './components/AdminLoginView.tsx';
 import { CampaignPublicView } from './components/CampaignPublicView.tsx';
@@ -199,6 +200,23 @@ export default function App() {
       />
 
       <div className="flex-1">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-4">
+          <div
+            role="note"
+            aria-label="Aviso de ambiente de testes"
+            className="flex items-start sm:items-center gap-3 px-4 py-3 rounded-xl bg-amber-50 dark:bg-amber-950/45 border border-amber-300 dark:border-amber-800/80 text-amber-950 dark:text-amber-100 text-xs sm:text-sm"
+          >
+            <ShieldAlert
+              className="w-5 h-5 text-amber-800 dark:text-amber-400 shrink-0 mt-0.5 sm:mt-0"
+              aria-hidden="true"
+            />
+            <p className="leading-relaxed">
+              <strong className="font-semibold">Ambiente em fase de testes:</strong> por segurança,
+              ainda não é possível realizar transações reais fora deste ambiente de teste controlado.
+            </p>
+          </div>
+        </div>
+
         {route === 'public' && (
           <CampaignPublicView
             campanhas={campanhas}
