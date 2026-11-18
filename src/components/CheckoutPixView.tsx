@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ArrowLeft,
   Check,
@@ -6,6 +6,7 @@ import {
   Clock,
   Copy,
   ShieldCheck,
+  X,
 } from 'lucide-react';
 import { ApiService } from '../services/api.ts';
 import { PixCheckoutResponse } from '../types.ts';
@@ -25,22 +26,51 @@ export const CheckoutPixView: React.FC<CheckoutPixViewProps> = ({
   const [donorName, setDonorName] = useState<string>(checkout.nome_doador || '');
   const [savedNameNotice, setSavedNameNotice] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
+  const [showToast, setShowToast] = useState<boolean>(false);
   const [status, setStatus] = useState(checkout.status_pagamento);
   const [isSimulating, setIsSimulating] = useState<boolean>(false);
   const [actionError, setActionError] = useState<string | null>(null);
 
+  const copyButtonRef = useRef<HTMLButtonElement | null>(null);
+  const copyInputRef = useRef<HTMLInputElement | null>(null);
+  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const donorNameRef = useRef<string>(donorName);
+  donorNameRef.current = donorName;
+
   // Persist optional donor name safely without requiring login or sensitive PII (RNF02)
-  const syncDonorNameIfNeeded = async (value: string) => {
-    try {
-      await ApiService.updateDonationName(checkout.id_doacao, value);
-      if (value.trim().length > 0) {
-        setSavedNameNotice(true);
-        setTimeout(() => setSavedNameNotice(false), 2500);
+  const syncDonorNameIfNeeded = useCallback(
+    async (value: string) => {
+      try {
+        await ApiService.updateDonationName(checkout.id_doacao, value);
+        if (value.trim().length > 0) {
+          setSavedNameNotice(true);
+          setTimeout(() => setSavedNameNotice(false), 2500);
+        }
+      } catch {
+        // Non-blocking for Pix copy flow
       }
-    } catch {
-      // Non-blocking for Pix copy flow
+    },
+    [checkout.id_doacao]
+  );
+
+  const triggerSuccessToast = useCallback(() => {
+    setCopied(true);
+    setShowToast(true);
+    if (toastTimerRef.current) {
+      clearTimeout(toastTimerRef.current);
     }
-  };
+    toastTimerRef.current = setTimeout(() => {
+      setCopied(false);
+      setShowToast(false);
+    }, 5000);
+  }, []);
+
+  const dismissToast = useCallback(() => {
+    if (toastTimerRef.current) {
+      clearTimeout(toastTimerRef.current);
+    }
+    setShowToast(false);
+  }, []);
 
   // Poll status while pending so confirmation reflects immediately even without SSE
   useEffect(() => {
@@ -60,26 +90,65 @@ export const CheckoutPixView: React.FC<CheckoutPixViewProps> = ({
     return () => clearInterval(interval);
   }, [checkout.id_doacao, status, onStatusApproved]);
 
-  const handleCopyPix = async () => {
-    setActionError(null);
-    await syncDonorNameIfNeeded(donorName);
+  // Native JavaScript Event Listener coupled to navigator.clipboard.writeText()
+  useEffect(() => {
+    const buttonEl = copyButtonRef.current;
+    if (!buttonEl) return;
 
-    try {
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(checkout.codigo_pix_gerado);
-      } else {
-        const input = document.getElementById('pix-copia-cola-input') as HTMLInputElement | null;
-        if (input) {
+    const handleNativeCopyEvent = async () => {
+      setActionError(null);
+      // Save optional donor name asynchronously so user-gesture clipboard access stays immediate
+      void syncDonorNameIfNeeded(donorNameRef.current);
+
+      try {
+        if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+          await navigator.clipboard.writeText(checkout.codigo_pix_gerado);
+        } else {
+          const input = copyInputRef.current;
+          if (!input) {
+            throw new Error('Campo Pix indisponível.');
+          }
+          input.focus();
           input.select();
-          document.execCommand('copy');
+          input.setSelectionRange(0, input.value.length);
+          const copiedLegacy = document.execCommand('copy');
+          if (!copiedLegacy) {
+            throw new Error('Falha ao copiar código.');
+          }
         }
+        triggerSuccessToast();
+      } catch {
+        try {
+          const input = copyInputRef.current;
+          if (input) {
+            input.focus();
+            input.select();
+            input.setSelectionRange(0, input.value.length);
+            if (document.execCommand('copy')) {
+              triggerSuccessToast();
+              return;
+            }
+          }
+        } catch {
+          // Fall through to accessible error feedback
+        }
+        setActionError('Não foi possível copiar automaticamente. Selecione o código acima.');
       }
-      setCopied(true);
-      setTimeout(() => setCopied(false), 5000);
-    } catch {
-      setActionError('Não foi possível copiar automaticamente. Selecione o código acima.');
-    }
-  };
+    };
+
+    buttonEl.addEventListener('click', handleNativeCopyEvent);
+    return () => {
+      buttonEl.removeEventListener('click', handleNativeCopyEvent);
+    };
+  }, [checkout.codigo_pix_gerado, syncDonorNameIfNeeded, triggerSuccessToast]);
+
+  useEffect(() => {
+    return () => {
+      if (toastTimerRef.current) {
+        clearTimeout(toastTimerRef.current);
+      }
+    };
+  }, []);
 
   const handleSimulateBankPayment = async () => {
     setIsSimulating(true);
@@ -221,6 +290,7 @@ export const CheckoutPixView: React.FC<CheckoutPixViewProps> = ({
                 Código Pix Copia e Cola
               </label>
               <input
+                ref={copyInputRef}
                 id="pix-copia-cola-input"
                 type="text"
                 readOnly
@@ -231,11 +301,14 @@ export const CheckoutPixView: React.FC<CheckoutPixViewProps> = ({
               />
             </div>
 
-            {/* Primary Accessible Copy Button (Icon + Text, >= 44x44px) */}
+            {/* Primary Accessible Copy Button (Bootstrap 5 utilities + High Contrast + Native EventListener) */}
             <button
+              ref={copyButtonRef}
+              id="btn-copiar-codigo-pix"
               type="button"
-              onClick={handleCopyPix}
-              className="w-full min-h-[56px] px-6 py-3.5 rounded-xl bg-sky-700 hover:bg-sky-800 dark:bg-sky-600 dark:hover:bg-sky-500 active:scale-[0.99] text-white font-display text-lg font-bold flex items-center justify-center gap-2.5 transition-all cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700"
+              className={`btn btn-lg btn-pix-contrast w-full font-display fw-bolder fs-5 text-white d-flex align-items-center justify-content-center gap-2.5 shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700 ${
+                copied ? 'is-copied' : ''
+              }`}
             >
               {copied ? (
                 <>
@@ -298,6 +371,31 @@ export const CheckoutPixView: React.FC<CheckoutPixViewProps> = ({
           </div>
         )}
       </section>
+
+      {/* Dynamic Success Toast Alert (Bootstrap 5 Toast structure) */}
+      {showToast && (
+        <div className="toast-container position-fixed bottom-0 end-0 p-3 sm:p-4">
+          <div
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            className="toast show align-items-center text-bg-success"
+          >
+            <div className="toast-body d-flex align-items-center gap-2.5 fw-bold">
+              <CheckCircle2 className="w-5 h-5 shrink-0" aria-hidden="true" />
+              <span>Código Pix copiado com sucesso!</span>
+            </div>
+            <button
+              type="button"
+              onClick={dismissToast}
+              aria-label="Fechar notificação de cópia"
+              className="min-h-[44px] min-w-[44px] d-flex align-items-center justify-content-center pr-2 text-white/90 hover:text-white cursor-pointer focus-visible:outline-2 focus-visible:outline-white rounded-r-xl"
+            >
+              <X className="w-4 h-4" aria-hidden="true" />
+            </button>
+          </div>
+        </div>
+      )}
     </main>
   );
 };
