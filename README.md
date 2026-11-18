@@ -1,10 +1,10 @@
-# Plataforma de Doações e Engajamento Pix — O.S.C Amigos da Mara
+# Plataforma de Doações e Engajamento Pix — Doações e Caridade
 
-Este repositório contém o código-fonte do Minimum Viable Product (MVP) desenvolvido para a **O.S.C Amigos da Mara**, Organização da Sociedade Civil fundada por Deusdália Guedes com foco no auxílio a crianças carentes em situação de vulnerabilidade.
+Este repositório contém o código-fonte do Minimum Viable Product (MVP) desenvolvido para o projeto **Doações e Caridade**, iniciativa social com foco no auxílio a crianças e famílias em situação de vulnerabilidade.
 
 ## O Problema
 
-A O.S.C Amigos da Mara dependia de processos manuais para a gestão de arrecadações e venda de ingressos solidários (como o *Baile à Fantasia* e campanhas do *Dia das Crianças*). A equipe precisava conferir individualmente comprovantes Pix via WhatsApp/Instagram e gerenciar campanhas de forma descentralizada, gerando sobrecarga administrativa, risco de erros operacionais e ausência de transparência em tempo real para os doadores.
+A iniciativa **Doações e Caridade** dependia de processos manuais para a gestão de arrecadações e venda de ingressos solidários (como o *Baile à Fantasia* e campanhas do *Dia das Crianças*). A equipe precisava conferir individualmente comprovantes Pix via WhatsApp/Instagram e gerenciar campanhas de forma descentralizada, gerando sobrecarga administrativa, risco de erros operacionais e ausência de transparência em tempo real para os doadores.
 
 ## A Solução (MVP)
 
@@ -17,7 +17,7 @@ Um Web App responsivo (*mobile-first*) com foco em simplicidade e automação do
 - **Checkout Pix Dinâmico:** Geração instantânea de QR Code e código Pix "Copia e Cola" com valor exato, sem exigir cadastro ou senha do doador.
 - **Privacidade e Transparência (LGPD):** Campo opcional para *Nome ou Apelido* (com doação anônima por padrão, sem coleta de CPF, e-mail ou telefone) e listagem dos **Últimos Apoiadores**.
 - **FAQ Expansível sobre Pix:** Seção de perguntas frequentes para orientar doadores sobre pagamento no mesmo celular, ausência de taxas e confirmação automática.
-- **Redes Sociais do Projeto:** Botões na página inicial com acesso direto ao Instagram (`@amigosdamara`), Facebook e compartilhamento via WhatsApp.
+- **Redes Sociais do Projeto:** Botões na página inicial com acesso direto ao Instagram (`@doacoesecaridade`), Facebook e compartilhamento via WhatsApp.
 - **Modo Claro e Modo Escuro:** Alternância persistente no cabeçalho (`localStorage` + preferência do sistema), mantendo alto contraste e fundo branco dedicado no QR Code para leitura confiável em apps bancários.
 
 #### Para a Administração (ONG)
@@ -88,10 +88,10 @@ Copie `.env.example` para `.env` e ajuste os valores conforme necessário:
 
 ```env
 SESSION_SECRET="troque-por-uma-chave-secreta-longa-e-aleatoria"
-ADMIN_EMAIL="admin@amigosdamara.org.br"
-ADMIN_PASSWORD="AmigosDaMara2026"
-PIX_CHAVE="amigosdamara@pix.org.br"
-PIX_RECEBEDOR="OSC AMIGOS DA MARA"
+ADMIN_EMAIL="admin@doacoesecaridade.org.br"
+ADMIN_PASSWORD="DoacoesCaridade2026"
+PIX_CHAVE="contato@doacoesecaridade.org.br"
+PIX_RECEBEDOR="DOACOES E CARIDADE"
 PIX_CIDADE="SAO PAULO"
 MERCADO_PAGO_ACCESS_TOKEN=""
 MERCADO_PAGO_WEBHOOK_SECRET=""
@@ -133,7 +133,7 @@ npm start
 
 ## Alinhamento com os ODS (ONU)
 
-Este projeto está diretamente conectado ao **ODS 1 — Erradicação da Pobreza**. Ao automatizar o fluxo de doações e eliminar a conferência manual de comprovantes, o software libera o tempo da equipe voluntária da O.S.C Amigos da Mara para atividades diretas de acolhimento e amplia a transparência e a captação de recursos para as crianças atendidas.
+Este projeto está diretamente conectado ao **ODS 1 — Erradicação da Pobreza**. Ao automatizar o fluxo de doações e eliminar a conferência manual de comprovantes, o software libera o tempo da equipe voluntária do projeto Doações e Caridade para atividades diretas de acolhimento e amplia a transparência e a captação de recursos para as crianças atendidas.
 
 ## Contribuição
 

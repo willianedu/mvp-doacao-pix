@@ -39,12 +39,12 @@ interface StaticStore {
   adminAuthenticated: boolean;
 }
 
-const STORAGE_KEY = 'amigos_da_mara_static_store_v1';
+const STORAGE_KEY = 'doacoes_caridade_static_store_v1';
 
 const ADMIN_USER: AdminUser = {
   id_admin: 1,
   nome: 'Deusdália Guedes',
-  email: 'admin@amigosdamara.org.br',
+  email: 'admin@doacoesecaridade.org.br',
 };
 
 function createInitialStore(): StaticStore {
@@ -56,7 +56,7 @@ function createInitialStore(): StaticStore {
       id_campanha: 1,
       titulo: 'Dia das Crianças',
       descricao:
-        'Arrecadação de brinquedos, kits escolares e cestas para as crianças atendidas pela O.S.C Amigos da Mara.',
+        'Arrecadação de brinquedos, kits escolares e cestas para as crianças atendidas pelo projeto Doações e Caridade.',
       imagem_url: '/src/assets/images/campanha_dia_criancas_1794953497340.jpg',
       meta_financeira: 5000,
       valor_arrecadado: 3200,
@@ -82,7 +82,7 @@ function createInitialStore(): StaticStore {
       id_campanha: 1,
       valor_doacao: 50,
       nome_doador: 'Maria Silva',
-      codigo_pix_gerado: '00020126580014br.gov.bcb.pix0136amigosdamara@pix.org.br520400005303986540550.005802BR5919OSC AMIGOS DA MARA6009SAO PAULO62150511ADMDC202600016304ABCD',
+      codigo_pix_gerado: '00020126580014br.gov.bcb.pix0136contato@doacoesecaridade.org.br520400005303986540550.005802BR5918DOACOES E CARIDADE6009SAO PAULO62150511ADMDC202600016304ABCD',
       txid: 'ADMDC20260001',
       status_pagamento: 'aprovado',
       created_at: hoursAgo(0.5),
@@ -93,7 +93,7 @@ function createInitialStore(): StaticStore {
       id_campanha: 1,
       valor_doacao: 150,
       nome_doador: 'Carlos Eduardo',
-      codigo_pix_gerado: '00020126580014br.gov.bcb.pix0136amigosdamara@pix.org.br5204000053039865406150.005802BR5919OSC AMIGOS DA MARA6009SAO PAULO62150511ADMDC202600026304ABCD',
+      codigo_pix_gerado: '00020126580014br.gov.bcb.pix0136contato@doacoesecaridade.org.br5204000053039865406150.005802BR5918DOACOES E CARIDADE6009SAO PAULO62150511ADMDC202600026304ABCD',
       txid: 'ADMDC20260002',
       status_pagamento: 'aprovado',
       created_at: hoursAgo(2),
@@ -104,7 +104,7 @@ function createInitialStore(): StaticStore {
       id_campanha: 1,
       valor_doacao: 200,
       nome_doador: null,
-      codigo_pix_gerado: '00020126580014br.gov.bcb.pix0136amigosdamara@pix.org.br5204000053039865406200.005802BR5919OSC AMIGOS DA MARA6009SAO PAULO62150511ADMDC202600036304ABCD',
+      codigo_pix_gerado: '00020126580014br.gov.bcb.pix0136contato@doacoesecaridade.org.br5204000053039865406200.005802BR5918DOACOES E CARIDADE6009SAO PAULO62150511ADMDC202600036304ABCD',
       txid: 'ADMDC20260003',
       status_pagamento: 'aprovado',
       created_at: hoursAgo(5),
@@ -115,7 +115,7 @@ function createInitialStore(): StaticStore {
       id_campanha: 1,
       valor_doacao: 2800,
       nome_doador: 'Apoiadores Comunitários',
-      codigo_pix_gerado: '00020126580014br.gov.bcb.pix0136amigosdamara@pix.org.br52040000530398654072800.005802BR5919OSC AMIGOS DA MARA6009SAO PAULO62150511ADMDC202600046304ABCD',
+      codigo_pix_gerado: '00020126580014br.gov.bcb.pix0136contato@doacoesecaridade.org.br52040000530398654072800.005802BR5918DOACOES E CARIDADE6009SAO PAULO62150511ADMDC202600046304ABCD',
       txid: 'ADMDC20260004',
       status_pagamento: 'aprovado',
       created_at: hoursAgo(16),
@@ -126,7 +126,7 @@ function createInitialStore(): StaticStore {
       id_campanha: 2,
       valor_doacao: 2500,
       nome_doador: 'Participantes do Baile',
-      codigo_pix_gerado: '00020126580014br.gov.bcb.pix0136amigosdamara@pix.org.br52040000530398654072500.005802BR5919OSC AMIGOS DA MARA6009SAO PAULO62150511ADMBF202600016304EF12',
+      codigo_pix_gerado: '00020126580014br.gov.bcb.pix0136contato@doacoesecaridade.org.br52040000530398654072500.005802BR5918DOACOES E CARIDADE6009SAO PAULO62150511ADMBF202600016304EF12',
       txid: 'ADMBF20260001',
       status_pagamento: 'aprovado',
       created_at: hoursAgo(8),
@@ -188,7 +188,7 @@ function computeCrc16(payload: string): string {
 function buildPixPayload(amount: number, txid: string): string {
   const merchantAccount = emvField(
     '26',
-    emvField('00', 'br.gov.bcb.pix') + emvField('01', 'amigosdamara@pix.org.br')
+    emvField('00', 'br.gov.bcb.pix') + emvField('01', 'contato@doacoesecaridade.org.br')
   );
   const additionalData = emvField('62', emvField('05', txid));
   const raw =
@@ -198,7 +198,7 @@ function buildPixPayload(amount: number, txid: string): string {
     emvField('53', '986') +
     emvField('54', amount.toFixed(2)) +
     emvField('58', 'BR') +
-    emvField('59', 'OSC AMIGOS DA MARA') +
+    emvField('59', 'DOACOES E CARIDADE') +
     emvField('60', 'SAO PAULO') +
     additionalData +
     '6304';
@@ -376,7 +376,10 @@ export const StaticFallbackService = {
 
   loginAdmin(email: string, senha: string): { authenticated: boolean; admin: AdminUser } {
     const normalizedEmail = email.trim().toLowerCase();
-    if (normalizedEmail !== ADMIN_USER.email || senha !== 'AmigosDaMara2026') {
+    const isValidDemoUser =
+      (normalizedEmail === ADMIN_USER.email && senha === 'DoacoesCaridade2026') ||
+      (normalizedEmail === ADMIN_USER.email && senha === 'AmigosDaMara2026');
+    if (!isValidDemoUser) {
       const error = new Error('Credenciais inválidas.') as Error & { status?: number };
       error.status = 401;
       throw error;

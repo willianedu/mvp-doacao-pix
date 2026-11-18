@@ -50,7 +50,7 @@ export const AdminLoginView: React.FC<AdminLoginViewProps> = ({
               Painel Administrativo
             </h1>
             <p className="text-sm text-slate-600 dark:text-slate-400">
-              Acesso restrito à equipe da O.S.C Amigos da Mara
+              Acesso restrito à equipe de Doações e Caridade
             </p>
           </div>
         </div>
@@ -70,7 +70,7 @@ export const AdminLoginView: React.FC<AdminLoginViewProps> = ({
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@amigosdamara.org.br"
+              placeholder="admin@doacoesecaridade.org.br"
               className="w-full min-h-[48px] px-4 py-2.5 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-sky-700 dark:focus:border-sky-500 rounded-xl text-base text-slate-900 dark:text-slate-100 focus:outline-none"
             />
           </div>

@@ -312,7 +312,7 @@ export default function App() {
       <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-6 px-4 sm:px-6 mt-12 transition-colors">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600 dark:text-slate-400">
           <p>
-            O.S.C Amigos da Mara · Plataforma de Doações e Engajamento Pix (ODS 1 — Erradicação da Pobreza)
+            Doações e Caridade · Plataforma de Doações e Engajamento Pix (ODS 1 — Erradicação da Pobreza)
           </p>
           <div className="flex items-center gap-4">
             <a

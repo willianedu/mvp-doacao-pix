@@ -55,6 +55,28 @@ export function initializeDatabase(): void {
   `);
 
   seedInitialData();
+  migrateBrandReferences();
+}
+
+function migrateBrandReferences(): void {
+  db.prepare(
+    `UPDATE campanhas
+     SET descricao = REPLACE(descricao, 'pela O.S.C Amigos da Mara', 'pelo projeto Doações e Caridade')
+     WHERE descricao LIKE '%O.S.C Amigos da Mara%'`
+  ).run();
+
+  db.prepare(
+    `UPDATE administradores
+     SET email = 'admin@doacoesecaridade.org.br'
+     WHERE email = 'admin@amigosdamara.org.br'
+       AND NOT EXISTS (SELECT 1 FROM administradores WHERE email = 'admin@doacoesecaridade.org.br')`
+  ).run();
+
+  db.prepare(
+    `UPDATE doacoes
+     SET codigo_pix_gerado = REPLACE(REPLACE(codigo_pix_gerado, 'amigosdamara@pix.org.br', 'contato@doacoesecaridade.org.br'), 'OSC AMIGOS DA MARA', 'DOACOES E CARIDADE')
+     WHERE codigo_pix_gerado LIKE '%OSC AMIGOS DA MARA%' OR codigo_pix_gerado LIKE '%amigosdamara@pix.org.br%'`
+  ).run();
 }
 
 function seedInitialData(): void {
@@ -66,8 +88,8 @@ function seedInitialData(): void {
     .get() as { total: number };
 
   if (adminCount.total === 0) {
-    const adminEmail = process.env.ADMIN_EMAIL || 'admin@amigosdamara.org.br';
-    const adminPass = process.env.ADMIN_PASSWORD || 'AmigosDaMara2026';
+    const adminEmail = process.env.ADMIN_EMAIL || 'admin@doacoesecaridade.org.br';
+    const adminPass = process.env.ADMIN_PASSWORD || 'DoacoesCaridade2026';
     const senhaHash = bcrypt.hashSync(adminPass, 10);
 
     db.prepare(
@@ -89,7 +111,7 @@ function seedInitialData(): void {
 
     const c1 = insertCampaign.run(
       'Dia das Crianças',
-      'Arrecadação de brinquedos, kits escolares e cestas para as crianças atendidas pela O.S.C Amigos da Mara.',
+      'Arrecadação de brinquedos, kits escolares e cestas para as crianças atendidas pelo projeto Doações e Caridade.',
       '/src/assets/images/campanha_dia_criancas_1794953497340.jpg',
       5000.0,
       3200.0,
@@ -138,7 +160,7 @@ function seedInitialData(): void {
         camp1Id,
         valor,
         nome,
-        `00020126580014br.gov.bcb.pix0136amigosdamara@pix.org.br5204000053039865405${valor.toFixed(2)}5802BR5919OSC AMIGOS DA MARA6009SAO PAULO62150511${txid}6304ABCD`,
+        `00020126580014br.gov.bcb.pix0136contato@doacoesecaridade.org.br5204000053039865405${valor.toFixed(2)}5802BR5918DOACOES E CARIDADE6009SAO PAULO62150511${txid}6304ABCD`,
         txid,
         status,
         ts,
@@ -162,7 +184,7 @@ function seedInitialData(): void {
         camp2Id,
         valor,
         nome,
-        `00020126580014br.gov.bcb.pix0136amigosdamara@pix.org.br5204000053039865406${valor.toFixed(2)}5802BR5919OSC AMIGOS DA MARA6009SAO PAULO62150511${txid}6304EF12`,
+        `00020126580014br.gov.bcb.pix0136contato@doacoesecaridade.org.br5204000053039865406${valor.toFixed(2)}5802BR5918DOACOES E CARIDADE6009SAO PAULO62150511${txid}6304EF12`,
         txid,
         status,
         ts,

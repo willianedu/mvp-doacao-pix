@@ -41,9 +41,9 @@ export function generatePixTxid(): string {
 }
 
 export function buildPixBrCode(amount: number, txid: string): string {
-  const pixKey = process.env.PIX_CHAVE || 'amigosdamara@pix.org.br';
+  const pixKey = process.env.PIX_CHAVE || 'contato@doacoesecaridade.org.br';
   const merchantName = normalizeAscii(
-    process.env.PIX_RECEBEDOR || 'OSC AMIGOS DA MARA',
+    process.env.PIX_RECEBEDOR || 'DOACOES E CARIDADE',
     25
   );
   const merchantCity = normalizeAscii(process.env.PIX_CIDADE || 'SAO PAULO', 15);
@@ -100,10 +100,10 @@ export async function generatePixCharge(params: {
         },
         body: JSON.stringify({
           transaction_amount: Number(params.amount.toFixed(2)),
-          description: `Doação O.S.C Amigos da Mara - ${params.campaignTitle}`.slice(0, 200),
+          description: `Doação Doações e Caridade - ${params.campaignTitle}`.slice(0, 200),
           payment_method_id: 'pix',
           payer: {
-            email: 'doador@amigosdamara.org.br',
+            email: 'doador@doacoesecaridade.org.br',
             first_name: params.donorName || 'Apoiador',
           },
           external_reference: txid,

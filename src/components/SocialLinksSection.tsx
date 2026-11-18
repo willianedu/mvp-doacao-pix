@@ -18,19 +18,19 @@ interface SocialLinkItem {
 
 export const SocialLinksSection: React.FC<SocialLinksSectionProps> = ({ campaignTitle }) => {
   const shareUrl =
-    typeof window !== 'undefined' ? window.location.origin : 'https://amigosdamara.org.br';
+    typeof window !== 'undefined' ? window.location.origin : 'https://doacoesecaridade.org.br';
   const message = campaignTitle
-    ? `Conheça e apoie a campanha "${campaignTitle}" da O.S.C Amigos da Mara: ${shareUrl}`
-    : `Conheça e apoie as ações solidárias da O.S.C Amigos da Mara: ${shareUrl}`;
+    ? `Conheça e apoie a campanha "${campaignTitle}" de Doações e Caridade: ${shareUrl}`
+    : `Conheça e apoie as ações solidárias de Doações e Caridade: ${shareUrl}`;
   const whatsappText = encodeURIComponent(message);
 
   const socialLinks: SocialLinkItem[] = [
     {
       id: 'instagram',
       name: 'Instagram',
-      handle: '@amigosdamara',
-      href: 'https://www.instagram.com/amigosdamara/',
-      ariaLabel: 'Abrir perfil oficial da O.S.C Amigos da Mara no Instagram em nova aba',
+      handle: '@doacoesecaridade',
+      href: 'https://www.instagram.com/doacoesecaridade/',
+      ariaLabel: 'Abrir perfil oficial de Doações e Caridade no Instagram em nova aba',
       iconBgClass: 'bg-pink-50 dark:bg-pink-950/60 border-pink-200 dark:border-pink-800',
       iconTextClass: 'text-pink-700 dark:text-pink-400',
       icon: (
@@ -53,9 +53,9 @@ export const SocialLinksSection: React.FC<SocialLinksSectionProps> = ({ campaign
     {
       id: 'facebook',
       name: 'Facebook',
-      handle: 'O.S.C Amigos da Mara',
-      href: 'https://www.facebook.com/amigosdamara',
-      ariaLabel: 'Abrir página oficial da O.S.C Amigos da Mara no Facebook em nova aba',
+      handle: 'Doações e Caridade',
+      href: 'https://www.facebook.com/doacoesecaridade',
+      ariaLabel: 'Abrir página oficial de Doações e Caridade no Facebook em nova aba',
       iconBgClass: 'bg-sky-50 dark:bg-sky-950/60 border-sky-200 dark:border-sky-800',
       iconTextClass: 'text-sky-700 dark:text-sky-400',
       icon: (
@@ -78,7 +78,7 @@ export const SocialLinksSection: React.FC<SocialLinksSectionProps> = ({ campaign
       name: 'WhatsApp',
       handle: 'Compartilhar campanha',
       href: `https://api.whatsapp.com/send?text=${whatsappText}`,
-      ariaLabel: 'Compartilhar a campanha da O.S.C Amigos da Mara pelo WhatsApp em nova aba',
+      ariaLabel: 'Compartilhar a campanha de Doações e Caridade pelo WhatsApp em nova aba',
       iconBgClass: 'bg-emerald-50 dark:bg-emerald-950/60 border-emerald-200 dark:border-emerald-800',
       iconTextClass: 'text-emerald-700 dark:text-emerald-400',
       icon: (
@@ -112,7 +112,7 @@ export const SocialLinksSection: React.FC<SocialLinksSectionProps> = ({ campaign
           Redes sociais do projeto
         </h2>
         <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 mt-1">
-          Acompanhe as entregas, eventos comunitários e novidades da O.S.C Amigos da Mara.
+          Acompanhe as entregas, eventos comunitários e novidades do projeto Doações e Caridade.
         </p>
       </div>
 

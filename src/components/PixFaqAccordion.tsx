@@ -18,13 +18,13 @@ const PIX_FAQ_ITEMS: FaqItem[] = [
     id: 'comprovante-whatsapp',
     question: 'Preciso enviar o comprovante no WhatsApp ou criar uma conta para doar?',
     answer:
-      'Não. Você não precisa criar senha, informar CPF nem enviar comprovantes manualmente. Assim que o pagamento Pix é concluído no banco, o sistema confirma a doação automaticamente para a equipe da O.S.C Amigos da Mara.',
+      'Não. Você não precisa criar senha, informar CPF nem enviar comprovantes manualmente. Assim que o pagamento Pix é concluído no banco, o sistema confirma a doação automaticamente para a equipe de Doações e Caridade.',
   },
   {
     id: 'taxas',
     question: 'Existe alguma taxa ou desconto sobre o valor que eu doar?',
     answer:
-      'Não há taxas de intermediários. O código Pix é gerado diretamente para a instituição, garantindo que 100% do valor escolhido chegue integralmente às ações da O.S.C Amigos da Mara.',
+      'Não há taxas de intermediários. O código Pix é gerado diretamente para a instituição, garantindo que 100% do valor escolhido chegue integralmente às ações de Doações e Caridade.',
   },
   {
     id: 'atualizacao-barra',

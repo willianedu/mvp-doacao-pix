@@ -197,7 +197,7 @@ export const CheckoutPixView: React.FC<CheckoutPixViewProps> = ({
 
           <div className="text-left sm:text-right">
             <p className="text-xs text-slate-500 dark:text-slate-400">Recebedor direto</p>
-            <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">O.S.C Amigos da Mara</p>
+            <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">Doações e Caridade</p>
           </div>
         </div>
 
@@ -273,7 +273,7 @@ export const CheckoutPixView: React.FC<CheckoutPixViewProps> = ({
           <div className="md:col-span-5 flex flex-col items-center justify-center p-4 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-2xl">
             <img
               src={checkout.qr_code_data_url}
-              alt={`QR Code Pix no valor de ${formatBRL(checkout.valor_doacao)} para O.S.C Amigos da Mara`}
+              alt={`QR Code Pix no valor de ${formatBRL(checkout.valor_doacao)} para Doações e Caridade`}
               className="w-52 h-52 sm:w-56 sm:h-56 bg-white p-2 rounded-xl border border-slate-200"
             />
             <p className="mt-2.5 text-xs font-medium text-slate-600 dark:text-slate-300 text-center">

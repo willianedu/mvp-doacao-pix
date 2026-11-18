@@ -36,7 +36,7 @@ export const TopBar: React.FC<TopBarProps> = ({
           }}
           className="font-display text-lg font-bold tracking-tight text-slate-900 dark:text-slate-100 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sky-700 rounded"
         >
-          Amigos da Mara
+          Doações e Caridade
         </a>
 
         {/* Zone 2: Concise single-line navigation links */}

@@ -105,7 +105,7 @@ export const CampaignPublicView: React.FC<CampaignPublicViewProps> = ({
               Nenhuma campanha ativa no momento
             </h1>
             <p className="text-slate-600 dark:text-slate-400 text-base leading-relaxed">
-              A equipe da O.S.C Amigos da Mara está preparando a próxima ação solidária. Volte em breve
+              A equipe do projeto Doações e Caridade está preparando a próxima ação solidária. Volte em breve
               ou acesse o painel administrativo para ativar uma campanha.
             </p>
           </div>
@@ -155,7 +155,7 @@ export const CampaignPublicView: React.FC<CampaignPublicViewProps> = ({
           <div className="lg:col-span-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 flex flex-col justify-between">
             <div>
               <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-slate-600 dark:text-slate-400 mb-3">
-                <span>O.S.C Amigos da Mara</span>
+                <span>Doações e Caridade</span>
                 <span aria-hidden="true">·</span>
                 <span>Pix Direto Sem Taxas</span>
                 <span aria-hidden="true">·</span>
@@ -320,7 +320,7 @@ export const CampaignPublicView: React.FC<CampaignPublicViewProps> = ({
               </button>
 
               <p className="text-xs text-slate-600 dark:text-slate-400 text-center">
-                Sem cadastro, sem senha e sem taxas: 100% do valor vai direto para a O.S.C Amigos da Mara.
+                Sem cadastro, sem senha e sem taxas: 100% do valor vai direto para Doações e Caridade.
               </p>
             </form>
           </div>
@@ -331,7 +331,7 @@ export const CampaignPublicView: React.FC<CampaignPublicViewProps> = ({
               {!imgBroken && resolvedImageUrl ? (
                 <img
                   src={resolvedImageUrl}
-                  alt={`Ação comunitária da campanha ${activeCampaign.titulo} - O.S.C Amigos da Mara`}
+                  alt={`Ação comunitária da campanha ${activeCampaign.titulo} - Doações e Caridade`}
                   referrerPolicy="no-referrer"
                   onError={() =>
                     setImageFailed((prev) => ({ ...prev, [activeCampaign.id_campanha]: true }))
@@ -344,13 +344,13 @@ export const CampaignPublicView: React.FC<CampaignPublicViewProps> = ({
                   <p className="font-display text-xl font-bold text-slate-900 dark:text-slate-100">
                     {activeCampaign.titulo}
                   </p>
-                  <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">O.S.C Amigos da Mara</p>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Doações e Caridade</p>
                 </div>
               )}
 
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/85 via-slate-950/45 to-transparent p-6 text-white">
                 <p className="text-xs font-medium text-slate-200">
-                  O.S.C Amigos da Mara · Fundadora Deusdália Guedes
+                  Doações e Caridade · Fundadora Deusdália Guedes
                 </p>
                 <p className="mt-1 font-display text-lg font-semibold leading-snug">
                   Apoio direto às crianças da comunidade com transparência em tempo real.
